@@ -1,0 +1,60 @@
+
+##This Exmaple to use API And analyze the results (JSON
+# now we will send message key GetIntModenxos , is mean "Get Interface Mode"
+
+DevName=post.name;   
+  DevName="Sw1"
+  DevIp  ="10.20.30.2";
+  DevType="Switch";
+  DevVer ="nexos";
+  
+function LoadIfacenx(refresh=false)
+{
+message="GetIntModenxos";
+// we Create DATA will send with device Informtin 
+var Data ={"DevName":DevName,"DevIP":DevIp,"DevType":DevType,"DevVer":DevVer};
+var DataSend = JSON.stringify(Data);
+NexApiGet("GetIntModenxos",DataSend,refresh,function(DataCallBack){
+// we will get databack and now use JSON parse
+var n=JSON.parse(DataCallBack);
+var intT= n.ins_api.outputs.output.body.TABLE_interface.ROW_interface;
+
+var intslot;
+var intMode;
+var accvlan;
+var accvlanName;
+var nativevlan;
+var trunkvlan;
+var vlans;
+ 
+// 
+$.each(intT, function (index, value) {
+ intslot ="";
+ intMode ="";
+ accvlan ="";
+ accvlanName ="";
+ nativevlan ="";
+ trunkvlan ="";
+ vlans="";
+
+if(value['interface'] != undefined)
+intslot=value['interface'];
+
+if(value['oper_mode'] != undefined)
+intMode=value['oper_mode'];
+
+if(value['access_vlan'] != undefined)
+accvlan=value['access_vlan'];
+
+if(value['access_vlan_name'] != undefined)
+accvlanName=value['access_vlan_name'];
+
+if(['trunk_vlans'] != undefined)
+trunkvlan=value['trunk_vlans'];
+
+
+if(value['native_vlan'] != undefined)
+nativevlan=value['native_vlan'];
+
+
+}
